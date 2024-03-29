@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "qrcodegenpy"
+version = "0.1.0"
+description = "QR Code Generator in python"
+authors = ["Shan Konduru <shankonduru@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+qrcode = "^7.4.2"
+pillow = "^10.2.0"
+
+[tool.poetry.group.dev.dependencies]
+qrcode = "^7.4.2"
+pillow = "^10.2.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
