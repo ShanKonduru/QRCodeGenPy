@@ -1,0 +1,6 @@
+qrcode
+pillow
+pytest
+pytest-cov
+pytest-html
+streamlit
