@@ -1,9 +1,62 @@
-# QR Code Generator in Python
+# QR Code Generator Python Package
 
-A comprehensive Python application for generating QR codes with both command-line and web interfaces. Features include customizable output directories, multiple content types, comprehensive testing, and a user-friendly Streamlit web UI.
+[![PyPI version](https://badge.fury.io/py/qrcodegenpy-shankonduru.svg)](https://pypi.org/project/qrcodegenpy-shankonduru/)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## 🚀 Features
+A comprehensive Python package for generating QR codes with both command-line and web interfaces. Now available on PyPI for easy installation and use in your projects!
 
+## 📦 Installation
+
+### From PyPI (Recommended)
+
+```bash
+pip install qrcodegenpy-shankonduru
+```
+
+### From Source
+
+```bash
+git clone https://github.com/shankonduru/qrcodegenpy.git
+cd qrcodegenpy
+pip install -e .
+```
+
+## 🚀 Quick Start
+
+### Command Line Interface
+
+After installation, use the `qrgen` command:
+
+```bash
+# Basic usage
+qrgen "Hello World!"
+
+# Custom prefix and output directory
+qrgen "https://github.com" --prefix "github" --output "my_qrcodes"
+
+# Generate QR code for your LinkedIn profile
+qrgen "https://www.linkedin.com/in/shankonduru/"
+```
+
+### Python API
+
+```python
+from qrcodegenpy_shankonduru import QRCodeGenerator
+
+# Create a generator instance
+generator = QRCodeGenerator("my_qr", "output")
+
+# Generate QR code
+filename = generator.generate_qr_code("https://pypi.org/project/qrcodegenpy-shankonduru/")
+print(f"QR code saved as: {filename}")
+```
+
+## 🌟 Features
+
+- **PyPI Package**: Available on PyPI for easy installation via pip
+- **CLI Interface**: Command-line tool (`qrgen`) for quick QR code generation
+- **Python API**: Clean, object-oriented interface for programmatic use
 - **Easy to Use**: Simple class-based interface for QR code generation
 - **Web Interface**: Modern Streamlit web UI for interactive QR code generation
 - **Organized Output**: Automatically saves all QR codes to designated output folders
@@ -15,9 +68,12 @@ A comprehensive Python application for generating QR codes with both command-lin
 - **Comprehensive Testing**: 96% test coverage with unit and integration tests
 - **Cross-Platform**: Works on Windows, Linux, and macOS
 - **Professional Setup**: Automated scripts for environment setup and management
+- **Security Audited**: Automated security scanning with safety, bandit, and pip-audit
 ```
 
-## 🧪 Testing
+## 🧪 Usage Examples
+
+### Basic Example
 
 Run the built-in example:
 
@@ -26,6 +82,34 @@ python QRCodeGenerator.py
 ```
 
 This will create a QR code for the LinkedIn profile URL and save it in the `output` folder.
+
+### Package Usage Examples
+
+```python
+from qrcodegenpy_shankonduru import QRCodeGenerator
+
+# Basic usage with defaults
+gen = QRCodeGenerator()
+file_path = gen.generate_qr_code("Hello, World!")
+print(f"QR code saved to: {file_path}")
+
+# Custom prefix and output directory
+gen = QRCodeGenerator("website", "qr_codes")
+file_path = gen.generate_qr_code("https://pypi.org/project/qrcodegenpy-shankonduru/")
+print(f"Website QR code saved to: {file_path}")
+
+# Generate multiple QR codes
+generator = QRCodeGenerator("contact", "business_cards")
+contacts = [
+    "mailto:john@example.com",
+    "tel:+1234567890",
+    "https://linkedin.com/in/johndoe"
+]
+
+for i, contact in enumerate(contacts):
+    result = generator.generate_qr_code(contact)
+    print(f"Contact {i+1} QR code: {result}")
+```
 
 ### 🌐 Streamlit Web Interface
 
@@ -47,6 +131,44 @@ The web interface provides:
 - **Multiple Content Types**: Support for URLs, text, email, phone, WiFi, vCard
 - **Customizable Settings**: Adjust file prefixes and output folders
 - **Usage Statistics**: Track QR codes generated in your session
+
+## 📦 Package Information
+
+### PyPI Package Details
+
+- **Package Name**: `qrcodegenpy-shankonduru`
+- **PyPI URL**: https://pypi.org/project/qrcodegenpy-shankonduru/
+- **Version**: 1.0.0
+- **Python Support**: 3.12+
+- **License**: MIT
+
+### CLI Command
+
+After installation, the package provides the `qrgen` command:
+
+```bash
+# Show help
+qrgen --help
+
+# Basic usage
+qrgen "Your text here"
+
+# Advanced usage
+qrgen "https://github.com/shankonduru" --prefix "github" --output "social_qr"
+```
+
+### Import in Python
+
+```python
+# Import the main class
+from qrcodegenpy_shankonduru import QRCodeGenerator
+
+# Create and use generator
+generator = QRCodeGenerator()
+result = generator.generate_qr_code("Your content here")
+```
+
+## 🛠️ Development Setup
 
 ### 🛠️ Quick Setup Scripts
 
@@ -362,38 +484,50 @@ This will create a QR code for the LinkedIn profile URL and display the filename
    cp .env.example .env
    ```
 
-2. Edit `.env` file with your PyPI credentials:
+2. Edit `.env` file with your PyPI API token:
    ```dotenv
-   PYPI_USER_NAME=your_pypi_username
-   PYPI_PASSWORD=your_pypi_password_or_token
+   PYPI_API_TOKEN=pypi-your_token_here
    ```
 
-   **Recommended:** Use an API token instead of your password. Generate one at: https://pypi.org/manage/account/token/
+   **Note:** API tokens are the recommended authentication method. Username/password authentication is deprecated.
 
 ### Upload to PyPI
 
 **Windows:**
 ```bash
-# Upload to PyPI (reads credentials from .env)
+# Upload to PyPI (reads API token from .env)
 scripts\windows\upload_pypi.bat
+
+# Safe upload with extra confirmations
+scripts\windows\upload_pypi_safe.bat
 ```
 
 **Linux/Mac:**
 ```bash
-# Make script executable
-chmod +x scripts/unix/upload_pypi.sh
+# Make scripts executable
+chmod +x scripts/unix/upload_pypi.sh scripts/unix/upload_pypi_safe.sh
 
-# Upload to PyPI (reads credentials from .env)
+# Upload to PyPI (reads API token from .env)
 scripts/unix/upload_pypi.sh
+
+# Safe upload with extra confirmations  
+scripts/unix/upload_pypi_safe.sh
 ```
 
 The upload script will:
+
 1. Run security audits
 2. Run all tests  
 3. Build the package
-4. Upload to PyPI using credentials from `.env`
+4. Upload to PyPI using API token from `.env`
 
-### Installation from PyPI
+### ✅ Package Successfully Published!
+
+The package is now available on PyPI:
+
+- **Package URL**: https://pypi.org/project/qrcodegenpy-shankonduru/
+- **Install Command**: `pip install qrcodegenpy-shankonduru`
+- **CLI Command**: `qrgen "Your text here"`
 
 Once published, users can install your package:
 ```bash
@@ -440,10 +574,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📈 Version History
 
 - **v1.0.0** - Major Release 🎉
-  - ✅ Complete project restructure with professional standards
-  - ✅ Comprehensive testing suite (26 tests, 96% coverage)
-  - ✅ Streamlit web interface for interactive QR generation
-  - ✅ Security auditing with safety, bandit, and pip-audit
+  - ✅ **PyPI Package Published**: Available at https://pypi.org/project/qrcodegenpy-shankonduru/
+  - ✅ **CLI Command**: `qrgen` command available after pip install
+  - ✅ **API Token Support**: Modern PyPI authentication with API tokens
+  - ✅ **Complete project restructure** with professional standards
+  - ✅ **Comprehensive testing suite** (26 tests, 96% coverage)
+  - ✅ **Streamlit web interface** for interactive QR generation
+  - ✅ **Security auditing** with safety, bandit, and pip-audit
+  - ✅ **Cross-platform automation** scripts for Windows and Unix
+  - ✅ **Organized script structure** in platform-specific folders
   - ✅ PyPI publishing automation with .env credential management
   - ✅ Cross-platform automation scripts (.bat and .sh)
   - ✅ HTML test reports and coverage analysis
