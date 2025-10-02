@@ -4,3 +4,7 @@ pytest
 pytest-cov
 pytest-html
 streamlit
+safety
+bandit
+pip-audit
+python-dotenv

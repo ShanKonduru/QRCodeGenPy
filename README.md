@@ -36,8 +36,8 @@ Launch the interactive web interface:
 streamlit run streamlit_app.py
 
 # Or using batch/shell scripts
-./run_streamlit.bat    # Windows
-./run_streamlit.sh     # Linux/Mac
+scripts\windows\run_streamlit.bat    # Windows
+scripts/unix/run_streamlit.sh        # Linux/Mac
 ```
 
 The web interface provides:
@@ -54,24 +54,24 @@ For easy environment management, use the provided scripts:
 
 **Windows (.bat files):**
 ```bash
-setup_env.bat      # Create virtual environment
-activate.bat       # Activate environment and open interactive shell
-install_deps.bat   # Install all dependencies
-run_main.bat       # Run the main CLI application
-run_tests.bat      # Run unit tests with coverage
-run_coverage.bat   # Generate detailed coverage reports
-run_streamlit.bat  # Launch web interface
+scripts\windows\setup_env.bat      # Create virtual environment
+scripts\windows\activate.bat       # Activate environment and open interactive shell
+scripts\windows\install_deps.bat   # Install all dependencies
+scripts\windows\run_main.bat       # Run the main CLI application
+scripts\windows\run_tests.bat      # Run unit tests with coverage
+scripts\windows\run_coverage.bat   # Generate detailed coverage reports
+scripts\windows\run_streamlit.bat  # Launch web interface
 ```
 
 **Linux/Mac (.sh files):**
 ```bash
-./setup_env.sh      # Create virtual environment
-./activate.sh       # Activate environment and open interactive shell
-./install_deps.sh   # Install all dependencies
-./run_main.sh       # Run the main CLI application
-./run_tests.sh      # Run unit tests with coverage
-./run_coverage.sh   # Generate detailed coverage reports
-./run_streamlit.sh  # Launch web interface
+scripts/unix/setup_env.sh      # Create virtual environment
+scripts/unix/activate.sh       # Activate environment and open interactive shell
+scripts/unix/install_deps.sh   # Install all dependencies
+scripts/unix/run_main.sh       # Run the main CLI application
+scripts/unix/run_tests.sh      # Run unit tests with coverage
+scripts/unix/run_coverage.sh   # Generate detailed coverage reports
+scripts/unix/run_streamlit.sh  # Launch web interface
 ```
 
 ### Running Unit Tests
@@ -262,21 +262,41 @@ The generated QR codes use the following optimized settings:
 ```
 QRCodeGenPy/
 ├── QRCodeGenerator.py          # Main QR code generator class
+├── streamlit_app.py           # Streamlit web interface
+├── run_security_audit.py      # Security audit script
+├── run_tests.py              # Test runner script
 ├── requirements.txt            # pip dependencies
-├── pyproject.toml             # Poetry configuration
+├── pyproject.toml             # Poetry configuration and PyPI metadata
+├── setup.py                  # PyPI setup script
 ├── poetry.lock               # Poetry lock file
 ├── pytest.ini               # Pytest configuration
-├── run_tests.py              # Test runner script
-├── README.md                 # This file
-├── example_output_folders.py  # Example demonstrating output folders
-├── 001.bat                  # Batch script
-├── 002.bat                  # Batch script
+├── README.md                 # This documentation
+├── LICENSE                   # MIT license
+├── MANIFEST.in              # Package inclusion rules
+├── .env.example             # Environment variables template
+├── .gitignore               # Git ignore rules
+├── scripts/                  # Automation scripts
+│   ├── windows/             # Windows batch files (.bat)
+│   │   ├── setup_env.bat
+│   │   ├── run_tests.bat
+│   │   ├── upload_pypi.bat
+│   │   └── ... (other .bat files)
+│   ├── unix/                # Unix/Linux/Mac shell scripts (.sh)
+│   │   ├── setup_env.sh
+│   │   ├── run_tests.sh
+│   │   ├── upload_pypi.sh
+│   │   └── ... (other .sh files)
+│   └── README.md            # Scripts documentation
 ├── tests/                    # Test directory
 │   ├── __init__.py          # Test package init
 │   ├── test_qr_code_generator.py  # Unit tests
 │   └── test_main_function.py     # Integration tests
 ├── output/                   # Default QR code output directory
 │   └── *.png                # Generated QR code files
+├── security_reports/         # Security audit reports
+│   ├── bandit_report.json   # Bandit security scan
+│   ├── pip_audit_report.json # pip-audit results
+│   └── security_summary.md  # Audit summary
 └── htmlcov/                  # Coverage report (generated)
     └── index.html           # HTML coverage report
 ```
@@ -333,7 +353,75 @@ This will create a QR code for the LinkedIn profile URL and display the filename
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
+## � PyPI Publishing
+
+### Setup PyPI Credentials
+
+1. Copy the environment template:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Edit `.env` file with your PyPI credentials:
+   ```dotenv
+   PYPI_USER_NAME=your_pypi_username
+   PYPI_PASSWORD=your_pypi_password_or_token
+   ```
+
+   **Recommended:** Use an API token instead of your password. Generate one at: https://pypi.org/manage/account/token/
+
+### Upload to PyPI
+
+**Windows:**
+```bash
+# Upload to PyPI (reads credentials from .env)
+scripts\windows\upload_pypi.bat
+```
+
+**Linux/Mac:**
+```bash
+# Make script executable
+chmod +x scripts/unix/upload_pypi.sh
+
+# Upload to PyPI (reads credentials from .env)
+scripts/unix/upload_pypi.sh
+```
+
+The upload script will:
+1. Run security audits
+2. Run all tests  
+3. Build the package
+4. Upload to PyPI using credentials from `.env`
+
+### Installation from PyPI
+
+Once published, users can install your package:
+```bash
+pip install qrcodegenpy-shankonduru
+```
+
+## 🔒 Security Auditing
+
+Run comprehensive security audits with:
+
+**Windows:**
+```bash
+scripts\windows\run_security_audit.bat
+```
+
+**Linux/Mac:**
+```bash
+scripts/unix/run_security_audit.sh
+```
+
+Security tools used:
+- **safety** - Checks for known vulnerabilities in dependencies
+- **bandit** - Scans Python code for security issues
+- **pip-audit** - Audits packages for known vulnerabilities
+
+Reports are saved in `security_reports/` folder.
+
+## �📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
@@ -351,11 +439,22 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📈 Version History
 
-- **v0.1.0** - Initial release
+- **v1.0.0** - Major Release 🎉
+  - ✅ Complete project restructure with professional standards
+  - ✅ Comprehensive testing suite (26 tests, 96% coverage)
+  - ✅ Streamlit web interface for interactive QR generation
+  - ✅ Security auditing with safety, bandit, and pip-audit
+  - ✅ PyPI publishing automation with .env credential management
+  - ✅ Cross-platform automation scripts (.bat and .sh)
+  - ✅ HTML test reports and coverage analysis
+  - ✅ Professional documentation and project structure
+  - ✅ Git workflow integration and CI/CD ready
+
+- **v0.1.0** - Initial Release
   - Basic QR code generation
   - Timestamp-based file naming
   - Customizable file prefixes
-  - Comprehensive documentation
+  - Basic documentation
 
 ---
 

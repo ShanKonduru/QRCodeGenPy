@@ -1,0 +1,18 @@
+include README.md
+include LICENSE
+include requirements.txt
+include pyproject.toml
+include pytest.ini
+include .gitignore
+recursive-include tests *.py
+recursive-include security_reports *.md *.txt *.json
+exclude scripts/windows/*.bat
+exclude scripts/unix/*.sh
+exclude scripts/README.md
+exclude run_*.py
+exclude streamlit_app.py
+exclude output/*
+exclude .venv/*
+exclude __pycache__/*
+exclude *.pyc
+exclude .pytest_cache/*
