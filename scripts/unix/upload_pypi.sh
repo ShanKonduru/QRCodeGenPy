@@ -25,26 +25,24 @@ echo "🔄 Installing/updating build tools..."
 pip install --upgrade pip setuptools wheel build twine python-dotenv
 
 # Load environment variables from .env file
-echo "🔑 Loading PyPI credentials from .env file..."
+echo "🔑 Loading PyPI API token from .env file..."
 if [ ! -f ".env" ]; then
-    echo "❌ .env file not found! Please create .env with PYPI_USER_NAME and PYPI_PASSWORD"
+    echo "❌ .env file not found! Please create .env with PYPI_API_TOKEN"
+    echo "💡 Get your token at: https://pypi.org/manage/account/token/"
     exit 1
 fi
 
-# Source the .env file
+# Read .env file and export variables
 export $(grep -v '^#' .env | xargs)
 
-if [ -z "$PYPI_USER_NAME" ]; then
-    echo "❌ PYPI_USER_NAME not found in .env file"
+if [ -z "$PYPI_API_TOKEN" ]; then
+    echo "❌ PYPI_API_TOKEN not found in .env file"
+    echo "💡 Please create an API token at https://pypi.org/manage/account/token/"
+    echo "   and add it to .env as: PYPI_API_TOKEN=your_token_here"
     exit 1
 fi
 
-if [ -z "$PYPI_PASSWORD" ]; then
-    echo "❌ PYPI_PASSWORD not found in .env file"
-    exit 1
-fi
-
-echo "✅ PyPI credentials loaded successfully for user: $PYPI_USER_NAME"
+echo "✅ PyPI API token loaded successfully"
 
 echo
 echo "⚠️  IMPORTANT: Make sure you have:"
@@ -118,12 +116,12 @@ fi
 # Upload to PyPI
 echo "🚀 Uploading to PyPI..."
 echo
-echo "🔑 Using credentials from .env file for user: $PYPI_USER_NAME"
+echo "🔑 Using API token authentication"
 echo
 
-# Use environment variables for authentication
-export TWINE_USERNAME="$PYPI_USER_NAME"
-export TWINE_PASSWORD="$PYPI_PASSWORD"
+# Use API token for authentication (PyPI recommended method)
+export TWINE_USERNAME="__token__"
+export TWINE_PASSWORD="$PYPI_API_TOKEN"
 
 if twine upload dist/*; then
     echo

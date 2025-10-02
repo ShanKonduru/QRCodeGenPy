@@ -9,6 +9,7 @@ homepage = "https://github.com/shankonduru/qrcodegenpy"
 repository = "https://github.com/shankonduru/qrcodegenpy"
 documentation = "https://github.com/shankonduru/qrcodegenpy/blob/main/README.md"
 keywords = ["qr-code", "qr-generator", "barcode", "python", "cli", "streamlit"]
+packages = [{include = "qrcodegenpy_shankonduru"}]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -20,6 +21,9 @@ classifiers = [
     "Topic :: Multimedia :: Graphics",
     "Topic :: Utilities",
 ]
+
+[tool.poetry.scripts]
+qrgen = "qrcodegenpy_shankonduru.cli:cli"
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -37,9 +41,6 @@ pip-audit = "^2.6.0"
 build = "^1.0.0"
 twine = "^4.0.0"
 python-dotenv = "^1.0.0"
-
-[tool.poetry.scripts]
-qrcode-gen = "QRCodeGenerator:main"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/shankonduru/qrcodegenpy/issues"

@@ -14,6 +14,7 @@ import argparse
 from pathlib import Path
 import json
 import os
+from datetime import datetime
 
 
 def run_command(command, description, capture_output=False):
@@ -71,23 +72,44 @@ def run_bandit_audit():
     reports_dir = Path("security_reports")
     reports_dir.mkdir(exist_ok=True)
     
+    # Target only our project files, not the entire directory
+    target_files = [
+        "QRCodeGenerator.py",
+        "streamlit_app.py", 
+        "run_security_audit.py",
+        "run_tests.py",
+        "tests/"
+    ]
+    
+    # Check which files exist
+    existing_files = []
+    for target in target_files:
+        if os.path.exists(target):
+            existing_files.append(target)
+    
+    if not existing_files:
+        print("⚠️ No target files found for Bandit scan")
+        return True
+    
+    target_str = " ".join(existing_files)
+    
     # Run bandit with JSON output for detailed analysis
     success_json, _, _ = run_command(
-        f"bandit -r . -f json -o {reports_dir}/bandit_report.json --exclude .venv,.git,__pycache__",
+        f"bandit -r {target_str} -f json -o {reports_dir}/bandit_report.json",
         "Running Bandit security scan (JSON output)",
         capture_output=True
     )
     
-    # Run bandit with human-readable output
+    # Run bandit with human-readable output  
     success_txt, _, _ = run_command(
-        f"bandit -r . -f txt -o {reports_dir}/bandit_report.txt --exclude .venv,.git,__pycache__",
+        f"bandit -r {target_str} -f txt -o {reports_dir}/bandit_report.txt",
         "Running Bandit security scan (Text output)",
         capture_output=True
     )
     
     # Display summary
     success_summary, _, _ = run_command(
-        "bandit -r . --exclude .venv,.git,__pycache__",
+        f"bandit -r {target_str}",
         "Bandit Security Summary",
         capture_output=False
     )
@@ -148,9 +170,12 @@ def generate_summary_report():
     
     print("\n📋 Generating Security Summary Report...")
     
+    # Generate current timestamp in a cross-platform way
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
     summary_content = f"""# Security Audit Summary Report
 
-**Generated on:** {subprocess.check_output(['date'], shell=True, text=True).strip()}
+**Generated on:** {current_time}
 **Project:** QR Code Generator Python
 
 ## Audit Tools Used

@@ -37,23 +37,18 @@ if not exist ".env" (
 
 REM Read .env file and set environment variables
 for /f "usebackq tokens=1,2 delims==" %%a in (".env") do (
-    if "%%a"=="PYPI_USER_NAME" set PYPI_USER_NAME=%%b
-    if "%%a"=="PYPI_PASSWORD" set PYPI_PASSWORD=%%b
+    if "%%a"=="PYPI_API_TOKEN" set PYPI_API_TOKEN=%%b
 )
 
-if "%PYPI_USER_NAME%"=="" (
-    echo ❌ PYPI_USER_NAME not found in .env file
+if "%PYPI_API_TOKEN%"=="" (
+    echo ❌ PYPI_API_TOKEN not found in .env file
+    echo 💡 Please create an API token at https://pypi.org/manage/account/token/
+    echo    and add it to .env as: PYPI_API_TOKEN=your_token_here
     pause
     exit /b 1
 )
 
-if "%PYPI_PASSWORD%"=="" (
-    echo ❌ PYPI_PASSWORD not found in .env file
-    pause
-    exit /b 1
-)
-
-echo ✅ PyPI credentials loaded successfully for user: %PYPI_USER_NAME%
+echo ✅ PyPI API token loaded successfully
 
 echo.
 echo ⚠️  IMPORTANT: Make sure you have:
@@ -139,12 +134,12 @@ if /i not "%upload%"=="y" (
 REM Upload to PyPI
 echo 🚀 Uploading to PyPI...
 echo.
-echo 🔑 Using credentials from .env file for user: %PYPI_USER_NAME%
+echo 🔑 Using API token authentication
 echo.
 
-REM Use environment variables for authentication
-set TWINE_USERNAME=%PYPI_USER_NAME%
-set TWINE_PASSWORD=%PYPI_PASSWORD%
+REM Use API token for authentication (PyPI recommended method)
+set TWINE_USERNAME=__token__
+set TWINE_PASSWORD=%PYPI_API_TOKEN%
 
 twine upload dist/*
 
